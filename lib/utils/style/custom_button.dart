@@ -45,7 +45,7 @@ class CustomButton {
         style: OutlinedButton.styleFrom(
           backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(radius ?? 0)),
+            borderRadius: BorderRadius.all(Radius.circular(radius)),
           ),
           side: BorderSide(width: 1, color: outlineColor),
         ),

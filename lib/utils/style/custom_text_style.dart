@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_n_life/getx/utils/style/size_config.dart';
-
-import 'custom_color.dart';
+import 'package:my_n_life/utils/style/size_config.dart';
 
 enum FontType{notoSans, poppins, ibmPlexSans}
 
@@ -30,11 +28,14 @@ class CustomTextStyle {
       fontSize: SizeConfig.getProportionateScreenWidth(fontSize),
     );
 
-    if(fontType == FontType.poppins)
+    if(fontType == FontType.poppins) {
       return GoogleFonts.poppins(textStyle: textStyle);
-    else if(fontType == FontType.ibmPlexSans)
+    }
+    else if(fontType == FontType.ibmPlexSans) {
       return GoogleFonts.ibmPlexSans(textStyle: textStyle);
-    else
+    }
+    else {
       return GoogleFonts.notoSans(textStyle: textStyle);
+    }
   }
 }

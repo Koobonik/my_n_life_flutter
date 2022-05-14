@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_n_life/utils/style/custom_color.dart';
+import 'package:my_n_life/utils/style/size_config.dart';
+import 'package:my_n_life/view/login_page.dart';
 
-import 'getx/utils/style/size_config.dart';
 
-void main() {
+void main() async {
+
   runApp(const MyApp());
 }
 
@@ -12,9 +16,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          color: CustomColor.fluorescentGreen,
+        ),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -27,6 +34,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+        '/LoginPage' :(BuildContext context) => const LoginPage(),
+      },
     );
   }
 }
@@ -60,6 +70,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 1), (){
+      Get.to(() => const LoginPage());
     });
   }
 
