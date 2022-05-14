@@ -44,11 +44,13 @@ dependencies:
   shared_preferences:
   keyboard_dismisser:
   flutter_svg:
-  google_fonts:
   path_provider:
   logger:
   intl: ^0.17.0
   kakao_flutter_sdk: ^1.0.0
+  sign_in_with_apple: ^3.3.0
+  jwt_decode: ^0.3.1
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +76,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/icons/social/
   #   - images/a_dot_ham.jpeg
 

@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_button.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,6 +16,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +49,9 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: CustomColor.kakao_yellow,
                   press: () async {
                     // KakaoContext.appVer
-                    print("safdsa");
+                    if (kDebugMode) {
+                      print("카카오 설치 여부 -> ${await isKakaoTalkInstalled()}");
+                    }
                     try {
                       // AccessTokenInfo tokenInfo =
                       // await UserApi.instance.accessTokenInfo();
@@ -73,10 +83,87 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
               ),
+              const SizedBox(height: 20,),
+              CustomButton.bottomButton(
+                  text: Padding(
+                    padding: const EdgeInsets.only(left :14.0, right: 14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset("assets/icons/social/apple_image.png", height: 24,),
+                        Text("Sign In with Apple", style: CustomTextStyle.createTextStyle(fontSize: 13, color: CustomColor.white, fontWeight: FontWeight.w700),),
+                        Image.asset("assets/icons/social/apple_image.png", color: Colors.transparent, height: 24),
+                      ],
+                    ),
+                  ),
+                  backgroundColor: CustomColor.black,
+                  press: (){
+                    signInWithApple();
+                  }
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> signInWithApple() async {
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    Log.info(credential);
+    print(credential.givenName);
+    print(credential.authorizationCode);
+    print(credential.identityToken);
+    Map<String, dynamic> payload = Jwt.parseJwt(credential.identityToken ?? '');
+    print(payload);
+    print(payload['email']);
+    // SignInWithApple.getKeychainCredential().then((value) => Log.info("${value}"));
+
+    print(credential.userIdentifier);
+    SignInWithApple.getCredentialState(credential.userIdentifier ?? '').then((value) => Log.warning(value));
+
+    // final signInResult = await userProvider.socialSignIn(socialSignInDto: SocialSignInRequestDto(token: credential.authorizationCode, platform: APPLE));
+    // print(signInResult.runtimeType);
+    // if(signInResult is NestResponse){
+    //   final credential2 = await SignInWithApple.getAppleIDCredential(
+    //     scopes: [
+    //       AppleIDAuthorizationScopes.email,
+    //       AppleIDAuthorizationScopes.fullName,
+    //     ],
+    //   );
+    //   final response = await userProvider.socialSignUp(signUpDto: SocialSignUpRequestDto(token: credential2.authorizationCode, platform: APPLE, birthdate: "19000101",mobile: Uuid().v4().substring(0, 11), username: payload['email'].toString().split("@")[0], nickname: "No.${Uuid().v4().substring(0, 8)}", profileImageUrl: "", email: payload['email']));
+    //   Log.warning(response);
+    // }
+    // else if(signInResult is DefaultResponse){
+    //   if(signInResult.statusCode == 404){
+    //     util.Util.showNegativeDialog4(context, "회원가입이 되어 있지 않습니다.", "가입을 위해 한번 더 인증을 해주시기 바랍니다.", "닫기", "인증", () { }, () async {
+    //       final credential2 = await SignInWithApple.getAppleIDCredential(
+    //         scopes: [
+    //           AppleIDAuthorizationScopes.email,
+    //           AppleIDAuthorizationScopes.fullName,
+    //         ],
+    //       );
+    //       final response = await userProvider.socialSignUp(signUpDto: SocialSignUpRequestDto(token: credential2.authorizationCode, platform: APPLE, birthdate: "19000101",mobile: Uuid().v4().substring(0, 11), username: payload['email'].toString().split("@")[0], nickname: "No.${Uuid().v4().substring(0, 8)}", profileImageUrl: "", email: payload['email']));
+    //       Log.info(signInResult.toString());
+    //       Log.info(response.runtimeType);
+    //       Log.info(response.toString());
+    //       if(response is SocialSignUpResponseDto){
+    //         air.Airbridge.event.send(air.SignUpEvent(user: air.User(id: userProvider.user.ID, email: userProvider.user.email),option: air.EventOption(action: "apple")));
+    //         loginSuccess(socialSignUpResponseDto: response, socialLoginType: APPLE, isSignUp: true);
+    //       }
+    //     });
+    //   }
+    //
+    // }
+    // else if(signInResult is SocialSignUpResponseDto){
+    //   Log.info(signInResult.toString());
+    //   loginSuccess(socialSignUpResponseDto: signInResult, socialLoginType: APPLE);
+    // }
   }
 }

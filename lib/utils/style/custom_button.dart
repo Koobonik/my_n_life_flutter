@@ -10,23 +10,13 @@ class CustomButton {
     return SizedBox(
       width: double.infinity,
       height: SizeConfig.getProportionateScreenHeight(height),
-      child: Container(
-        // decoration: BoxDecoration(
-        //   boxShadow: [BoxShadow(
-        //       color: Colors.grey.withOpacity(0.5),
-        //       spreadRadius: 5,
-        //       blurRadius: 7,
-        //       offset: Offset(0, 3)
-        //   ),]
-        // ),
-        child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: backgroundColor,
-              shape:rounded ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)) : RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-            ),
-            onPressed: () => press,
-            child: text
-        ),
+      child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: backgroundColor,
+            shape:rounded ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)) : RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+          ),
+          onPressed: () { press();},
+          child: text
       ),
     );
   }

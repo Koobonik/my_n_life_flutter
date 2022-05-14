@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:my_n_life/view/login_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 void main() async {
-
+  await dotenv.load(fileName: ".env");
+  print("hi");
+  print(dotenv.get("kakaoAppKey"));
+  KakaoSdk.init(nativeAppKey: dotenv.get("kakaoAppKey"));
   runApp(const MyApp());
 }
 
@@ -61,17 +66,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   void initState() {
@@ -128,11 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
