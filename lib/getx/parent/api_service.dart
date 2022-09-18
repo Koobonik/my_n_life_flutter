@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
+import 'package:my_n_life/getx/parent/getx_parent_controller.dart';
 import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/util.dart';
 import 'const_library.dart';
 import 'package:flutter/foundation.dart';
-import 'parent_provider.dart';
 
 
 class ApiService {
@@ -16,7 +16,7 @@ class ApiService {
     dioObject.options.headers = {"authorization": "Bearer $token"};
     try{
       final response = await dioObject.post(hostUrl, data: map).timeout(const Duration(seconds: 10));
-      print("api_service : ${response.data}");
+
       return _response(response);
     }on dio.DioError catch (e){
       Log.error(e.response);
@@ -29,13 +29,13 @@ class ApiService {
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
     dioObject.options.headers = {"authorization": "Bearer $token"};
     try{
-      final response = await dioObject.get(Uri.encodeFull('$nestPaymentHostUrl$_path'), queryParameters: queryParameters).timeout(const Duration(seconds: 10));
+      final response = await dioObject.get(Uri.encodeFull('$hostUrl$_path'), queryParameters: queryParameters).timeout(const Duration(seconds: 10));
       if (kDebugMode) {
         print("api_get $_path : ${response.data}");
       }
-      return _nestResponse(response);
+      return _apiResponse(response);
     } on dio.DioError catch (e){
-      return _nestResponse(e.response!);
+      return _apiResponse(e.response!);
     }
   }
 
@@ -46,11 +46,12 @@ class ApiService {
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
-      final response = await dioObject.post('${Uri.encodeFull('$nestPaymentHostUrl$_path')}', data: _body).timeout(Duration(seconds: 10));
+      final response = await dioObject.post(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
       print("api_post $_path : ${response.data}");
-      return _nestResponse(response);
+      return _apiResponse(response);
     } on dio.DioError catch (e){
-      return _nestResponse(e.response!);
+      Log.error(e);
+      return _apiResponse(e.response!);
     }
   }
 
@@ -61,13 +62,13 @@ class ApiService {
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
-      final response = await dioObject.put(Uri.encodeFull('$nestPaymentHostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
+      final response = await dioObject.put(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
       if (kDebugMode) {
         print("api_put $_path : ${response.data}");
       }
-      return _nestResponse(response);
+      return _apiResponse(response);
     } on dio.DioError catch (e){
-      return _nestResponse(e.response!);
+      return _apiResponse(e.response!);
     }
   }
 
@@ -78,13 +79,13 @@ class ApiService {
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
-      final response = await dioObject.patch(Uri.encodeFull('$nestPaymentHostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
+      final response = await dioObject.patch(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
       if (kDebugMode) {
         print("api_patch $_path : ${response.data}");
       }
-      return _nestResponse(response);
+      return _apiResponse(response);
     } on dio.DioError catch (e){
-      return _nestResponse(e.response!);
+      return _apiResponse(e.response!);
       // if (e.response.statusCode == 401) {
       //   Log.info(e.response.data);
       //   Log.warning(e.response.headers);
@@ -104,11 +105,11 @@ class ApiService {
     dioObject.options.headers = {"authorization": "Bearer $token"};
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
-    final response = await dioObject.delete(Uri.encodeFull('$nestPaymentHostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
+    final response = await dioObject.delete(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print("api_delete $_path : ${response.data}");
     }
-    return _nestResponse(response);
+    return _apiResponse(response);
   }
 
   dynamic _response(dio.Response response) {
@@ -134,10 +135,14 @@ class ApiService {
   }
 
   // nest에 대한 리스폰스 핸들링 해주는 곳
-  dynamic _nestResponse(dio.Response response) {
+  dynamic _apiResponse(dio.Response response) {
     switch (response.statusCode) {
       case 200:
       case 201:
+        Log.info("response data -> ${response.data}");
+        if(response.data == null){
+          return null;
+        }
         try{
           if(response.data["data"] != null) {
             return response.data["data"];
@@ -202,23 +207,12 @@ class NestResponse{
     );
   }
 }
-const releaseHost = 'https://api.playinstudio.com/query';
-String debugHost = 'https://api.playinstudio.com/query';
+const releaseHost = 'https://seedosee.com';
+String debugHost = 'http://172.30.1.36:8080';
 
 bool adminTestMode = false;
 String get hostUrl {
   if (adminTestMode) return debugHost;
   if (kReleaseMode) return releaseHost;
   return debugHost;
-}
-
-const chatBotHost = "http://27.96.135.168:5100";
-
-
-const releaseNestPaymentHost = 'https://payments.pingpong.house';
-String debugNestPaymentHost = 'https://payments.pingpong.house';
-String get nestPaymentHostUrl {
-  if (adminTestMode) return debugNestPaymentHost;
-  if (kReleaseMode) return releaseNestPaymentHost;
-  return debugNestPaymentHost;
 }

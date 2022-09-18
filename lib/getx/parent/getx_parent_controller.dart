@@ -10,7 +10,7 @@ enum ViewState {
   Idle
 }
 
-class GetXParentProvider extends GetxController{
+class GetXParentController extends GetxController{
   ViewState _state = ViewState.Idle;
   ViewState get state => _state;
 

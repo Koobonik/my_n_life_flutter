@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:my_n_life/getx/controller/users_getx_controller.dart';
 import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_button.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
@@ -24,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   }
   @override
   Widget build(BuildContext context) {
+    final usersGetXController = Get.put(UsersGetXController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -60,6 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                       // var code = await AuthCodeClient.instance.requestWithTalk();
                       Log.info("code -> $code");
                       try {
+                        usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
+
 
                         // var token = await AuthApi.instance.issueAccessToken(authCode: code.accessToken);
                         // Log.info("token -> $token");
