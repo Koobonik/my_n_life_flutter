@@ -13,7 +13,7 @@ class ApiService {
     Map map = {"query" : data};
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     try{
       final response = await dioObject.post(hostUrl, data: map).timeout(const Duration(seconds: 10));
 
@@ -27,7 +27,7 @@ class ApiService {
   Future<dynamic> get(String _path, {dynamic queryParameters}) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     try{
       final response = await dioObject.get(Uri.encodeFull('$hostUrl$_path'), queryParameters: queryParameters).timeout(const Duration(seconds: 10));
       if (kDebugMode) {
@@ -42,7 +42,7 @@ class ApiService {
   Future<dynamic> post(String _path, dynamic data) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
@@ -58,7 +58,7 @@ class ApiService {
   Future<dynamic> put(String _path, dynamic data) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
@@ -75,7 +75,7 @@ class ApiService {
   Future<dynamic> patch(String _path, dynamic data) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     try{
@@ -102,7 +102,7 @@ class ApiService {
   Future<dynamic> delete(String _path, dynamic data) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
-    dioObject.options.headers = {"authorization": "Bearer $token"};
+    dioObject.options.headers = {"authorization": token};
     final map = (data is Map ? data : data?.toMap()) ?? {};
     String _body = json.encode(map);
     final response = await dioObject.delete(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
@@ -155,20 +155,20 @@ class ApiService {
         }
         break;
       case 400:
-        return NestResponse.fromMap(json.decode(jsonEncode(response.data)));
+        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
       case 401:
       case 403:
-        return NestResponse.fromMap(json.decode(jsonEncode(response.data)));
+        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
       case 409:
         var responseJson = json.decode(response.data.toString());
         return responseJson;
       case 422:
-        return NestResponse.fromMap(json.decode(jsonEncode(response.data)));
+        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
       case 500:
-        return NestResponse.fromMap(json.decode(jsonEncode(response.data)));
+        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
 
       default:
-        return NestResponse.fromMap(json.decode(jsonEncode(response.data)));
+        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
     }
   }
 
@@ -182,30 +182,58 @@ class ApiService {
   }
 }
 
-class NestResponse{
+class ApiResponseDto{
+  int code;
   String message;
-  String errorMessage;
 
-  NestResponse({required this.message, required this.errorMessage});
+//<editor-fold desc="Data Methods">
+
+  ApiResponseDto({
+    required this.code,
+    required this.message,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ApiResponseDto &&
+          runtimeType == other.runtimeType &&
+          code == other.code &&
+          message == other.message);
+
+  @override
+  int get hashCode => code.hashCode ^ message.hashCode;
 
   @override
   String toString() {
-    return 'NestResponse{message: $message, errorMessage: $errorMessage}';
+    return 'ApiResponseDto{' + ' code: $code,' + ' message: $message,' + '}';
+  }
+
+  ApiResponseDto copyWith({
+    int? code,
+    String? message,
+  }) {
+    return ApiResponseDto(
+      code: code ?? this.code,
+      message: message ?? this.message,
+    );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'code': code,
       'message': message,
-      'errorMessage': errorMessage,
     };
   }
 
-  factory NestResponse.fromMap(dynamic map) {
-    return NestResponse(
-      message: map['message'].toString(),
-      errorMessage: map['errorMessage'].toString(),
+  factory ApiResponseDto.fromMap(Map<String, dynamic> map) {
+    return ApiResponseDto(
+      code: map['code'] as int,
+      message: map['message'] as String,
     );
   }
+
+//</editor-fold>
 }
 const releaseHost = 'https://seedosee.com';
 String debugHost = 'http://172.30.1.36:8080';
