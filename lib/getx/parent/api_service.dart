@@ -6,6 +6,15 @@ import 'package:my_n_life/utils/util.dart';
 import 'const_library.dart';
 import 'package:flutter/foundation.dart';
 
+const releaseHost = 'https://seedosee.com';
+String debugHost = 'http://172.26.112.1:8080';
+
+bool adminTestMode = false;
+String get hostUrl {
+  if (adminTestMode) return debugHost;
+  if (kReleaseMode) return releaseHost;
+  return debugHost;
+}
 
 class ApiService {
   dio.Dio dioObject = dio.Dio();
@@ -234,13 +243,4 @@ class ApiResponseDto{
   }
 
 //</editor-fold>
-}
-const releaseHost = 'https://seedosee.com';
-String debugHost = 'http://172.30.1.36:8080';
-
-bool adminTestMode = false;
-String get hostUrl {
-  if (adminTestMode) return debugHost;
-  if (kReleaseMode) return releaseHost;
-  return debugHost;
 }

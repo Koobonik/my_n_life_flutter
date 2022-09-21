@@ -8,6 +8,7 @@ import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_button.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
+import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.only(left:20, right: 20, top: SizeConfig.safeAreaTop!),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
