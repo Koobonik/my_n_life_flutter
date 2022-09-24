@@ -9,6 +9,7 @@ import 'package:my_n_life/utils/style/custom_button.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
+import 'package:my_n_life/view/main_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,18 +65,12 @@ class _LoginPageState extends State<LoginPage> {
                       // var code = await AuthCodeClient.instance.requestWithTalk();
                       Log.info("code -> $code");
                       try {
-                        usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
+                        final result = await usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
+                        if(result == null){
+                          Get.offAll(() => const MainPage());
+                        }
 
 
-                        // var token = await AuthApi.instance.issueAccessToken(authCode: code.accessToken);
-                        // Log.info("token -> $token");
-                        final user = await UserApi.instance.me();
-                        Log.info("user -> $user");
-
-                        // final result = await UserApi.instance.loginWithKakaoTalk();
-                        // Log.info("result -> $result");
-                        // AccessTokenStore.instance.toStore(token);
-                        // final kakaoUrl = Uri.parse('[토큰 전달할 URL]');
 
                       } catch (error) {
                         if (kDebugMode) {

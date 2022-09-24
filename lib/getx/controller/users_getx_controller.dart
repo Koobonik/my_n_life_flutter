@@ -19,6 +19,7 @@ class UsersGetXController extends GetXParentController{
     }
     await Util.setSharedString(KEY_TOKEN, response);
     getProfile();
+    return null;
   }
 
   Future<dynamic> getProfile() async {

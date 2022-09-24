@@ -47,7 +47,7 @@ dependencies:
   # 스와이프해서 메뉴 열어주는 기능
   flutter_slidable: ^2.0.0
 
-  geolocator:
+#  geolocator:
   validators:
   shared_preferences:
   keyboard_dismisser:
