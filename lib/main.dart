@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' hide Util;
+import 'package:my_n_life/getx/controller/users_getx_controller.dart';
+import 'package:my_n_life/getx/parent/const_library.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:my_n_life/view/login_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:my_n_life/view/main_page.dart';
+import 'package:my_n_life/view/select_life_page.dart';
+
+import 'utils/util.dart';
 
 
 void main() async {
@@ -71,10 +77,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    Future.delayed(const Duration(seconds: 1), (){
-      Get.to(() => const LoginPage());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if(await Util.getSharedString(KEY_TOKEN) != null){
+        final usersGetXController = Get.put(UsersGetXController());
+        usersGetXController.getProfile();
+        Get.off(() => const MainPage());
+      }else {
+        Get.to(() => const LoginPage());
+      }
     });
+    // Future.delayed(const Duration(seconds: 1), () async {
+    //   Get.to(() => const LoginPage());
+    // });
   }
 
   @override

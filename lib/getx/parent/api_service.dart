@@ -7,7 +7,7 @@ import 'const_library.dart';
 import 'package:flutter/foundation.dart';
 
 const releaseHost = 'https://seedosee.com';
-String debugHost = 'http://172.26.112.1:8080';
+String debugHost = 'http://172.30.26.32:8080';
 
 bool adminTestMode = false;
 String get hostUrl {

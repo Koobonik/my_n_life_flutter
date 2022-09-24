@@ -53,10 +53,10 @@ class Users {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'nickname': this.nickname,
-      'imageUrl': this.imageUrl,
-      'roles': this.roles,
+      'id': id,
+      'nickname': nickname,
+      'imageUrl': imageUrl,
+      'roles': roles,
     };
   }
 

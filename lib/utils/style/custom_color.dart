@@ -4,10 +4,12 @@ class CustomColor {
   static const lightBlue = Color(0xFF4F80FF);
   static const white = Color(0xFFFFFFFF);
   static const grey = Color(0xFFB5B5B5);
-  static const grey2 = Color.fromRGBO(119,119,119, 0.45);
-  static const grey3 = Color(0xFF777777);
-  static const grey4 = Color(0xFF7D7D7D);
-  static const grey5 = Color(0xFFCCCCCC);
+  static const grey1 = Color(0xFFF5F5F5);
+  static const grey2 = Color(0xFFE5E5E5);
+  static const grey3 = Color(0xFFC9C9C9);
+  static const grey4 = Color(0xFF8D8D8D);
+  static const grey5 = Color(0xFF504F4D);
+  static const grey6 = Color(0xFF242424);
   static const lineGrey = Color(0xFFC4C4C4);
   static const darkGrey = Color(0xFF707786);
   static const darkGrey2 = Color(0xFF1f1f20);
