@@ -27,5 +27,6 @@ class UsersGetXController extends GetXParentController{
     final response = await _apiService.get(callUri);
     Log.info(response);
     users = Users.fromMap(response);
+    update();
   }
 }

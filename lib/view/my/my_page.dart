@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:my_n_life/getx/controller/users_getx_controller.dart';
+import 'package:my_n_life/getx/parent/const_library.dart';
+import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
+import 'package:my_n_life/utils/util.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -15,9 +18,27 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hi9();
+
+  }
+  hi9(){
+    final usersGetXController = Get.put(UsersGetXController());
+    usersGetXController.getProfile().then((value) {
+      setState(() {
+
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final usersGetXController = Get.put(UsersGetXController());
+    if(usersGetXController.users == null) return const SizedBox.shrink();
+    // Util.delSharedString(KEY_TOKEN);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -35,10 +56,10 @@ class _MyPageState extends State<MyPage> {
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(200),
-                      child: CachedNetworkImage(imageUrl: usersGetXController.users!.imageUrl, width: 200, fit: BoxFit.cover,)
+                      borderRadius: BorderRadius.circular(140),
+                      child: CachedNetworkImage(imageUrl: usersGetXController.users!.imageUrl, width: 140, fit: BoxFit.cover,)
                     ),
-                    const SizedBox(width: 12,),
+                    const SizedBox(width: 20,),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,30 +78,35 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.only(right: 20, left: 20),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20,),
+              Column(
+                children: [
+                  const SizedBox(height: 20,),
 
-                    Row(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20),
+                    child: Row(
                       children: [
                         Text("지금 나의 프로필", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w500),),
                         Expanded(child: Container()),
                         Text("스와이프 해보세요!", style: CustomTextStyle.createTextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: CustomColor.grey3),)
                       ],
                     ),
+                  ),
 
-                    slidableWidget("바이크 & 모터사이클"),
+                  slidableWidget("바이크 & 모터사이클"),
 
-                    const SizedBox(height: 12,),
-                    Text("그 외 프로필", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w500),),
+                  const SizedBox(height: 12,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                        child: Text("그 외 프로필", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w500),)),
+                  ),
 
-                    slidableWidget("스쿠버다이빙"),
-                    slidableWidget("야구"),
-                    slidableWidget("싸이클 & 자전거"),
-                  ],
-                ),
+                  slidableWidget("스쿠버다이빙"),
+                  slidableWidget("야구"),
+                  slidableWidget("싸이클 & 자전거"),
+                ],
               ),
             ],
           ),
@@ -97,21 +123,23 @@ class _MyPageState extends State<MyPage> {
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
         // A motion is a widget used to control how the pane animates.
-        motion: const ScrollMotion(),
+        motion: const StretchMotion(),
 
         // A pane can dismiss the Slidable.
         dismissible: DismissiblePane(onDismissed: () {}),
         dragDismissible: false,
+        extentRatio: 4/5,
 
         // All actions are defined in the children parameter.
         children: const [
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
+            // flex: 2,
             onPressed: null,
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
+            label: '라이프 삭제하기',
           ),
           SlidableAction(
             onPressed: null,
@@ -125,30 +153,37 @@ class _MyPageState extends State<MyPage> {
 
       // The end action pane is the one at the right or the bottom side.
       endActionPane: const ActionPane(
-        motion: ScrollMotion(),
+        motion: StretchMotion(),
+        // extentRatio: 4/5,
         children: [
           SlidableAction(
             // An action can be bigger than the others.
-            flex: 2,
+            // flex: 2,
             onPressed: null,
             backgroundColor: Color(0xFF7BC043),
             foregroundColor: Colors.white,
-            icon: Icons.archive,
-            label: 'Archive',
+            icon: Icons.update,
+            label: '수정하기',
           ),
           SlidableAction(
             onPressed: null,
             backgroundColor: Color(0xFF0392CF),
             foregroundColor: Colors.white,
-            icon: Icons.save,
-            label: 'Save',
+            icon: Icons.outbond_outlined,
+            label: '전환하기',
           ),
         ],
       ),
 
       // The child of the Slidable is what the user sees when the
       // component is not dragged.
-      child: ListTile(title: Text(title)),
+      child: ListTile(
+        title: Text(title),
+        // style: ListTileStyle.list,
+        // visualDensity: const VisualDensity(vertical: -3), // to compact
+
+        contentPadding: const EdgeInsets.only(left: 20.0, right: 20),
+      ),
     );
   }
 }
