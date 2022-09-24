@@ -35,15 +35,22 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.5
-  dio:
-  cached_network_image:
-  image_picker:
+  dio: ^4.0.6
+  # 권한
+  permission_handler: ^10.0.0
+  # 이미지
+  flutter_svg: ^1.1.4
+  cached_network_image: ^3.2.1
+  image_picker: ^0.8.5+3
+  image_cropper: ^1.4.1
+
+  # 스와이프해서 메뉴 열어주는 기능
+  flutter_slidable: ^2.0.0
+
   geolocator:
-  permission_handler:
   validators:
   shared_preferences:
   keyboard_dismisser:
-  flutter_svg:
   path_provider:
   logger:
   intl: ^0.17.0

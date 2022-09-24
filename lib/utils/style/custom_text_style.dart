@@ -6,9 +6,9 @@ enum FontType{notoSans, poppins, ibmPlexSans}
 class CustomTextStyle {
   static createTextStyle ({
     required double fontSize,
-    required Color color,
     required FontWeight fontWeight,
     // bool fontFamilyIsApple = true,
+    Color color = Colors.black,
     double letterSpacing = 0,
     TextDecoration decoration = TextDecoration.none,
     bool shadow = false,

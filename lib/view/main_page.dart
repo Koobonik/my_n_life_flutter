@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
+import 'package:my_n_life/view/my/my_page.dart';
 
 import '../utils/style/custom_color.dart';
 
@@ -15,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _widgetOptions = <Widget>[
     const Center(child: Center(child: Text("홈 페이지"))),
     const Center(child: Center(child: Text("몰라 나도"))),
-    const Center(child: Center(child: Text("MY 페이지"))),
+    const MyPage()
   ];
   void _onItemTapped(int index) {
     setState(() {
@@ -50,9 +51,9 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
-              child: Icon(Icons.folder, size: 24, color: _selectedIndex == 1 ? CustomColor.black : CustomColor.grey3,),
+              child: Icon(Icons.chat_bubble_outline_sharp, size: 24, color: _selectedIndex == 1 ? CustomColor.black : CustomColor.grey3,),
             ),
-            label: '주문하기',
+            label: '대화',
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -63,6 +64,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
+        backgroundColor: CustomColor.grey2,
         elevation: 1,
         selectedItemColor: CustomColor.black,
         unselectedItemColor: CustomColor.grey3,
