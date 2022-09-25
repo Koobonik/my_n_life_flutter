@@ -82,7 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
       if(await Util.getSharedString(KEY_TOKEN) != null){
         final usersGetXController = Get.put(UsersGetXController());
         usersGetXController.getProfile();
-        Get.off(() => const MainPage());
+        if(usersGetXController.users == null){
+          Get.to(() => const LoginPage());
+        }
+        else {
+          Get.off(() => const MainPage());
+        }
       }else {
         Get.to(() => const LoginPage());
       }

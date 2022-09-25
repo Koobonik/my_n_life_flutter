@@ -19,10 +19,16 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
 
+  List<String> hobbyList = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    hobbyList.add("바이크 & 모터사이클");
+    hobbyList.add("스쿠버다이빙");
+    hobbyList.add("스노우보드");
+    hobbyList.add("싸이클 & 자전거");
     hi9();
 
   }
@@ -64,7 +70,7 @@ class _MyPageState extends State<MyPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("나의 바이크 라이프", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                        Text("나의 ${hobbyList.first} 라이프", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
                         const SizedBox(height: 12,),
                         Text("닉네임 : 살떡꿀떡"),
                         const SizedBox(height: 20,),
@@ -86,26 +92,30 @@ class _MyPageState extends State<MyPage> {
                     padding: const EdgeInsets.only(left: 20.0, right: 20),
                     child: Row(
                       children: [
-                        Text("지금 나의 프로필", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w500),),
+                        Text("지금 나의 프로필", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700),),
                         Expanded(child: Container()),
                         Text("스와이프 해보세요!", style: CustomTextStyle.createTextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: CustomColor.grey3),)
                       ],
                     ),
                   ),
 
-                  slidableWidget("바이크 & 모터사이클"),
+                  slidableWidget(hobbyList.first),
 
                   const SizedBox(height: 12,),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                        child: Text("그 외 프로필", style: CustomTextStyle.createTextStyle(fontSize: 13, fontWeight: FontWeight.w500),)),
+                      child: Text("그 외 프로필", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700),)
+                    ),
                   ),
 
-                  slidableWidget("스쿠버다이빙"),
-                  slidableWidget("야구"),
-                  slidableWidget("싸이클 & 자전거"),
+                  Column(
+                    children: List.generate(hobbyList.length, (index) {
+                      if(index == 0) return const SizedBox.shrink();
+                      return slidableWidget(hobbyList.toList()[index]);
+                    })
+                  ),
                 ],
               ),
             ],
@@ -152,21 +162,27 @@ class _MyPageState extends State<MyPage> {
       ),
 
       // The end action pane is the one at the right or the bottom side.
-      endActionPane: const ActionPane(
-        motion: StretchMotion(),
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
         // extentRatio: 4/5,
         children: [
           SlidableAction(
             // An action can be bigger than the others.
             // flex: 2,
-            onPressed: null,
+            onPressed: (context){
+            },
             backgroundColor: Color(0xFF7BC043),
             foregroundColor: Colors.white,
             icon: Icons.update,
             label: '수정하기',
           ),
           SlidableAction(
-            onPressed: null,
+            onPressed: (c){
+              setState(() {
+                hobbyList.removeWhere((element) => element == title);
+                hobbyList.insert(0, title);
+              });
+            },
             backgroundColor: Color(0xFF0392CF),
             foregroundColor: Colors.white,
             icon: Icons.outbond_outlined,
