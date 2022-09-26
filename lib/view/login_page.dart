@@ -10,6 +10,7 @@ import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:my_n_life/view/main_page.dart';
+import 'package:my_n_life/view/select_life_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
@@ -66,8 +67,19 @@ class _LoginPageState extends State<LoginPage> {
                       Log.info("code -> $code");
                       try {
                         final result = await usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
-                        if(result == null){
-                          Get.offAll(() => const MainPage());
+                        Log.info("result ->>> $result");
+                        // 회원가입이라면
+                        if(result != null && result is bool && result == true){
+                          Get.offAll(() => const SelectLifePage());
+                        }
+                        else if(result != null && result is bool && result == false){
+                          if(kDebugMode){
+                            // 지금은 회원가입 된다는 가정하에 라이프 선택 페이지로 감
+                            Get.offAll(() => const SelectLifePage());
+                          }
+                          else {
+                            Get.offAll(() => const MainPage());
+                          }
                         }
 
 

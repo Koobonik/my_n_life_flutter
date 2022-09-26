@@ -48,7 +48,7 @@ class ApiService {
     }
   }
 
-  Future<dynamic> post(String _path, dynamic data) async {
+  Future<dynamic> post(String _path, dynamic data, {bool justReturnResponse = false}) async {
     // 토큰이 null 이라면 빈 문자열 넣어줌.
     final token = await Util.getSharedString(KEY_TOKEN) ?? '';
     dioObject.options.headers = {"authorization": token};
@@ -57,6 +57,7 @@ class ApiService {
     try{
       final response = await dioObject.post(Uri.encodeFull('$hostUrl$_path'), data: _body).timeout(const Duration(seconds: 10));
       print("api_post $_path : ${response.data}");
+      if(justReturnResponse) return response;
       return _apiResponse(response);
     } on dio.DioError catch (e){
       Log.error(e);
@@ -174,7 +175,12 @@ class ApiService {
       case 422:
         return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
       case 500:
-        return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
+        Log.error(response.data);
+        try{
+          return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));
+        }catch(e){
+          return null;
+        }
 
       default:
         return ApiResponseDto.fromMap(json.decode(jsonEncode(response.data)));

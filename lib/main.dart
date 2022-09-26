@@ -31,7 +31,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
+          centerTitle: true,
           color: CustomColor.fluorescentGreen,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+              // If the button is pressed, return green, otherwise blue
+              if (states.contains(MaterialState.pressed)) {
+                return Colors.white;
+              }
+              return Colors.black;
+            }),
+          )
         ),
         // This is the theme of your application.
         //
@@ -81,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if(await Util.getSharedString(KEY_TOKEN) != null){
         final usersGetXController = Get.put(UsersGetXController());
-        usersGetXController.getProfile();
-        if(usersGetXController.users == null){
+        final result = await usersGetXController.getProfile();
+        if(result == null){
           Get.to(() => const LoginPage());
         }
         else {
