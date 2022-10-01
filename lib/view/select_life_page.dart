@@ -7,6 +7,7 @@ import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
+import 'package:my_n_life/view/life_average.dart';
 
 class SelectLifePage extends StatefulWidget {
   const SelectLifePage({Key? key}) : super(key: key);
@@ -43,9 +44,9 @@ class _SelectLifePageState extends State<SelectLifePage> {
       appBar: AppBar(
         title: Text("선택"),
         actions: [
-          TextButton(
+          if(selectedHobby != null) TextButton(
             onPressed: (){
-
+              Get.to(() => LifeAveragePage(selectedHobby!));
             },
             child: Text("다음"),
           )
@@ -81,8 +82,8 @@ class _SelectLifePageState extends State<SelectLifePage> {
                         CachedNetworkImage(
                           imageUrl: hobbyList[index].mainImage,
                           imageBuilder: (context, imageProvider) => Container(
-                            width: 90.0,
-                            height: 90.0,
+                            width: 80.0,
+                            height: 80.0,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: selectedHobby == hobbyList[index] ? Border.all(color: Colors.greenAccent, width: 3) : null,
@@ -95,12 +96,9 @@ class _SelectLifePageState extends State<SelectLifePage> {
                         ),
                         Container(
                           alignment: Alignment.center,
+                          margin: const EdgeInsets.only(top: 4),
                           child: Text(
-                            hobbyList[index].name,
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
+                            hobbyList[index].name, style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700),),
                         ),
                       ],
                     ),
