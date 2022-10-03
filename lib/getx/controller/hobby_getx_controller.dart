@@ -20,6 +20,16 @@ class HobbyGetXController extends GetXParentController{
       return response;
     }
     return response.map<Hobby>((map) => Hobby.fromMap(map)).toList();
+  }
 
+  Future<dynamic> getOneHobbyCostDataList({required int id}) async {
+    final callUri = "/api/hobby/getHobbyCost?id=$id";
+    final response = await _apiService.get(callUri);
+    Log.info("$callUri :: -> $response");
+    Log.info("$callUri :: -> ${response.runtimeType}");
+    if (response is ApiResponseDto) {
+      return response;
+    }
+    return List<Map>.from(response);
   }
 }

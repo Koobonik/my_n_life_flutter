@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' hide Util;
 import 'package:my_n_life/getx/controller/users_getx_controller.dart';
 import 'package:my_n_life/getx/parent/const_library.dart';
+import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:my_n_life/view/login_page.dart';
@@ -91,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      Log.info(await Util.getSharedString(KEY_TOKEN) != null);
       if(await Util.getSharedString(KEY_TOKEN) != null){
         final usersGetXController = Get.put(UsersGetXController());
         final result = await usersGetXController.getProfile();
