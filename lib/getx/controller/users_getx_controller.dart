@@ -36,9 +36,9 @@ class UsersGetXController extends GetXParentController{
 
   Future<dynamic> getProfile() async {
     const callUri = "/api/users/getProfile";
-    final response = await _apiService.get(callUri);
-    Log.info(response);
     try{
+      final response = await _apiService.get(callUri);
+      Log.info(response);
       users = Users.fromMap(response);
       update();
     }catch(e){

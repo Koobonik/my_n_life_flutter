@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_n_life/getx/controller/hobby_getx_controller.dart';
 import 'package:my_n_life/getx/model/hobby.dart';
 import 'package:my_n_life/utils/log.dart';
+import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/util.dart';
 
@@ -40,57 +43,91 @@ class _LifeAveragePageState extends State<LifeAveragePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Center(child: Text("${widget.hobby.name} 취미에 대한 평균 입문 비용을 계산해볼게요...", style: CustomTextStyle.createTextStyle(fontSize: 16, fontWeight: FontWeight.w700),)),
+      body: Stack(
+        children: [
+          ImageFiltered(
+            imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+              child: CachedNetworkImage(imageUrl: widget.hobby.mainImage, height: double.infinity, fit: BoxFit.cover,)),
+          SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: Text("${widget.hobby.name} 취미에 대한 평균 입문 비용을 계산해볼게요...", style: CustomTextStyle.createTextStyle(fontSize: 16, fontWeight: FontWeight.w700),)),
 
-                const SizedBox(height: 20,),
-                if(data.isNotEmpty) Column(
-                  children: List.generate(data.length, (index) =>
-                      Column(
-                        children: data[index].entries.map((e) => Text("${e.key} : ${e.value}")).toList(),
-                      )),
-                ),
-                GridView.builder(
-                  itemCount: data.length, //item 개수
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-                    // childAspectRatio: 1/1, //item 의 가로 1, 세로 2 의 비율
-                    mainAxisSpacing: 5, //수평 Padding
-                    crossAxisSpacing: 5, //수직 Padding
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    //item 의 반목문 항목 형성
-                    return GestureDetector(
-                      onTap: (){
-                      },
-                      child: Column(
-                        children: [
-                          Container(
+                    const SizedBox(height: 20,),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text("옆으로 넘기면서 보기 >", style: CustomTextStyle.createTextStyle(fontSize: 11, fontWeight: FontWeight.w700),)
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 100,
+                      child: PageView.builder(
+                        // clipBehavior: Clip.none,
+                        // allowImplicitScrolling: true,
+                        itemCount: data.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index){
+                          return Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blue)
+                              borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.blue),
+                              color: CustomColor.lightBlue.withOpacity(0.2)
                             ),
                             alignment: Alignment.center,
-                            margin: const EdgeInsets.only(top: 4),
-                            child: Column(
-                              children: data[index].entries.map((e) => Text("${e.key} : ${Util.getMoneyFormat(e.value)}원")).toList(),
+                            margin: const EdgeInsets.only(left: 20, right: 20),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                children: data[index].entries.map((e) => Text("${e.key} : ${Util.getMoneyFormat(e.value)}원", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700),)).toList(),
+                              ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                    // GridView.builder(
+                    //   itemCount: data.length, //item 개수
+                    //   shrinkWrap: true,
+                    //   scrollDirection: Axis.vertical,
+                    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    //     crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
+                    //     // childAspectRatio: 1/1, //item 의 가로 1, 세로 2 의 비율
+                    //     mainAxisSpacing: 5, //수평 Padding
+                    //     crossAxisSpacing: 5, //수직 Padding
+                    //   ),
+                    //   itemBuilder: (BuildContext context, int index) {
+                    //     //item 의 반목문 항목 형성
+                    //     return GestureDetector(
+                    //       onTap: (){
+                    //       },
+                    //       child: Column(
+                    //         children: [
+                    //           Container(
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.blue)
+                    //             ),
+                    //             alignment: Alignment.center,
+                    //             margin: const EdgeInsets.only(top: 4),
+                    //             child: Column(
+                    //               children: data[index].entries.map((e) => Text("${e.key} : ${Util.getMoneyFormat(e.value)}원")).toList(),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
