@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+const sBottomNavigatorHeight = 64.0;
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;
   static double? screenWidth;
