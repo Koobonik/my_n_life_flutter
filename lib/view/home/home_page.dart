@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_n_life/getx/parent/const_library.dart';
+import 'package:my_n_life/utils/util.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
@@ -11,25 +13,26 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
-    var channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'));
+  late IOWebSocketChannel channel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    initSocket();
 
-
-    channel.stream.listen((message) {
-
-      channel.sink.add('received!');
-      // channel.sink.close(status.goingAway);
-    });
 
   }
 
   Future<void> initSocket() async {
-
+    channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'), headers: {"token": await Util.getSharedString(KEY_TOKEN)});
+    channel.stream.listen((message) {
+      print(message);
+      channel.sink.add('received!');
+      // channel.sink.close(status.goingAway);
+    });
   }
 
   @override
@@ -40,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    print(channel.innerWebSocket?.pingInterval);
     return Scaffold(
       appBar: AppBar(
         title: Text("홈"),
@@ -48,8 +50,8 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TextButton(onPressed: (){
-              Map map = {"userToken": "hi", "text":"반가워요 ㅎㅎ", "createdAt": DateTime.now().toString()};
+            TextButton(onPressed: () async {
+              Map map = {"userToken": await Util.getSharedString(KEY_TOKEN), "text":"반가워요 ㅎㅎ", "createdAt": DateTime.now().toString(), "receivedUserId" : 1};
               channel.sink.add(jsonEncode(map));
               // channel.stream.listen((message) {
               //   channel.sink.add('received!');
@@ -57,9 +59,13 @@ class _HomePageState extends State<HomePage> {
               // });
             }, child: Text("전송")),
 
-            TextButton(onPressed: (){
-              channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'));
-
+            TextButton(onPressed: () async {
+              // channel.sink.close();
+              channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'), headers: {"token": await Util.getSharedString(KEY_TOKEN)});
+              channel.stream.listen((message) {
+                print(message);
+                // channel.sink.close(status.goingAway);
+              });
             }, child: Text("재연결"))
           ],
         ),

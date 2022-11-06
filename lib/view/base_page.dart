@@ -7,6 +7,7 @@ import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
 import 'package:my_n_life/view/home/home_page.dart';
+import 'package:my_n_life/view/my/my_page.dart';
 
 class BasePage extends StatefulWidget {
   const BasePage({Key? key}) : super(key: key);
@@ -336,7 +337,7 @@ class _BasePageState extends State<BasePage> {
                 builder: (context) {
                   Log.info("이이 MyPage");
                   return const CupertinoPageScaffold(
-                    child: SizedBox.shrink(),
+                    child: MyPage(),
                   );
                 });
           default:

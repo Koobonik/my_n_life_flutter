@@ -62,8 +62,8 @@ class _MyPageState extends State<MyPage> {
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(140),
-                      child: CachedNetworkImage(imageUrl: usersGetXController.users!.imageUrl, width: 140, fit: BoxFit.cover,)
+                      borderRadius: BorderRadius.circular(200),
+                      child: CachedNetworkImage(imageUrl: usersGetXController.users!.imageUrl, width: 100, height: 100, fit: BoxFit.cover,)
                     ),
                     const SizedBox(width: 20,),
                     Column(
