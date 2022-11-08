@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_n_life/getx/dto/chat_dto.dart';
 import 'package:my_n_life/getx/parent/const_library.dart';
 import 'package:my_n_life/utils/util.dart';
 import 'package:web_socket_channel/io.dart';
@@ -29,10 +30,15 @@ class _HomePageState extends State<HomePage> {
   Future<void> initSocket() async {
     channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'), headers: {"token": await Util.getSharedString(KEY_TOKEN)});
     channel.stream.listen((message) {
-      print(message);
-      channel.sink.add('received!');
+      processMessage(message);
       // channel.sink.close(status.goingAway);
     });
+  }
+
+  void processMessage(dynamic message){
+    print("수신된 메시지 -> $message");
+    final f = ChatDto.fromMap(jsonDecode(message));
+    print("f -> ${f.toString()}");
   }
 
   @override
