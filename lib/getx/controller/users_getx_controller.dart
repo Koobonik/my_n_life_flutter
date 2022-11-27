@@ -30,7 +30,7 @@ class UsersGetXController extends GetXParentController{
         await Util.setSharedString(KEY_TOKEN, response.data);
       }
     }
-    getProfile();
+    await getProfile();
     return isSignup;
   }
 
@@ -40,6 +40,32 @@ class UsersGetXController extends GetXParentController{
       final response = await _apiService.get(callUri);
       Log.info(response);
       users = Users.fromMap(response);
+      Log.info("users -> ${users.toString()}");
+      update();
+    }catch(e){
+      update();
+      Log.error(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> createHobby(int hobbyId) async {
+    final callUri = "/api/users/social/createNewHobbyAccount/$hobbyId";
+    try{
+      final response = await _apiService.post(callUri, {});
+      Log.info(response);
+      update();
+    }catch(e){
+      update();
+      return null;
+    }
+  }
+
+  Future<dynamic> updateUserData(Map map) async{
+    const callUri = "/api/users/updateUserData";
+    try{
+      final response = await _apiService.patch(callUri, map);
+      Log.info(response);
       update();
     }catch(e){
       update();

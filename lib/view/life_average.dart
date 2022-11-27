@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_n_life/getx/controller/hobby_getx_controller.dart';
+import 'package:my_n_life/getx/controller/users_getx_controller.dart';
 import 'package:my_n_life/getx/model/hobby.dart';
 import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_button.dart';
@@ -44,6 +46,7 @@ class _LifeAveragePageState extends State<LifeAveragePage> {
 
   @override
   Widget build(BuildContext context) {
+    final usersGetXController = Get.put(UsersGetXController());
     print(widget.hobby);
     return Scaffold(
       body: Stack(
@@ -110,7 +113,9 @@ class _LifeAveragePageState extends State<LifeAveragePage> {
           width: double.infinity,
           child: Text("${widget.hobby.name} 시작하기!", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700), textAlign: TextAlign.center,),), backgroundColor: CustomColor.lightBlue, radius: 24, outlineColor: Colors.transparent, onPressed: () async {
           // 취미 계정을 서버에서 생성 해주어야 함.
-          
+          usersGetXController.createHobby(widget.hobby.id).then((value){
+
+          });
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BasePage()));
         }),
       ),

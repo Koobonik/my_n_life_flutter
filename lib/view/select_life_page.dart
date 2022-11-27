@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_n_life/getx/controller/hobby_getx_controller.dart';
+import 'package:my_n_life/getx/controller/users_getx_controller.dart';
 import 'package:my_n_life/getx/model/hobby.dart';
 import 'package:my_n_life/utils/log.dart';
 import 'package:my_n_life/utils/style/custom_color.dart';
 import 'package:my_n_life/utils/style/custom_text_style.dart';
 import 'package:my_n_life/utils/style/size_config.dart';
+import 'package:my_n_life/utils/util.dart';
 import 'package:my_n_life/view/life_average.dart';
 
 class SelectLifePage extends StatefulWidget {
@@ -40,12 +42,24 @@ class _SelectLifePageState extends State<SelectLifePage> {
   }
   @override
   Widget build(BuildContext context) {
+    final usersGetXController = Get.put(UsersGetXController());
     return Scaffold(
       appBar: AppBar(
         title: Text("선택"),
         actions: [
           if(selectedHobby != null) TextButton(
-            onPressed: (){
+            onPressed: () async {
+              if(usersGetXController.users != null){
+
+                // 성별 선택이 안되어 있을 경우
+                if(usersGetXController.users?.gender == null){
+                  final isMale = await Util.genderChoiceAlert(context: context);
+                  Log.info("gender -> ${isMale ? "남성" : "여성"}");
+                  await usersGetXController.updateUserData({"gender" : isMale ? "male" : "female"});
+                  Get.to(() => LifeAveragePage(selectedHobby!));
+                }
+              }
+
               Get.to(() => LifeAveragePage(selectedHobby!));
             },
             child: Text("다음"),

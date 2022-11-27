@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_n_life/getx/controller/users_getx_controller.dart';
 import 'package:my_n_life/getx/dto/chat_dto.dart';
 import 'package:my_n_life/getx/parent/const_library.dart';
 import 'package:my_n_life/utils/util.dart';
@@ -49,31 +51,38 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
+    final usersGetXController = Get.put(UsersGetXController());
     return Scaffold(
       appBar: AppBar(
         title: Text("홈"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextButton(onPressed: () async {
-              Map map = {"userToken": await Util.getSharedString(KEY_TOKEN), "text":"반가워요 ㅎㅎ", "createdAt": DateTime.now().toString(), "receivedUserId" : 1};
-              channel.sink.add(jsonEncode(map));
-              // channel.stream.listen((message) {
-              //   channel.sink.add('received!');
-              //   // channel.sink.close(status.goingAway);
-              // });
-            }, child: Text("전송")),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // usersGetXController.createHobby();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              TextButton(onPressed: () async {
+                Map map = {"userToken": await Util.getSharedString(KEY_TOKEN), "text":"반가워요 ㅎㅎ", "createdAt": DateTime.now().toString(), "receivedUserId" : 1};
+                channel.sink.add(jsonEncode(map));
+                // channel.stream.listen((message) {
+                //   channel.sink.add('received!');
+                //   // channel.sink.close(status.goingAway);
+                // });
+              }, child: Text("전송")),
 
-            TextButton(onPressed: () async {
-              // channel.sink.close();
-              channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'), headers: {"token": await Util.getSharedString(KEY_TOKEN)});
-              channel.stream.listen((message) {
-                print(message);
-                // channel.sink.close(status.goingAway);
-              });
-            }, child: Text("재연결"))
-          ],
+              TextButton(onPressed: () async {
+                // channel.sink.close();
+                channel = IOWebSocketChannel.connect(Uri.parse('ws://192.168.0.5:8080/chat'), headers: {"token": await Util.getSharedString(KEY_TOKEN)});
+                channel.stream.listen((message) {
+                  print(message);
+                  // channel.sink.close(status.goingAway);
+                });
+              }, child: Text("재연결"))
+            ],
+          ),
         ),
       ),
     );

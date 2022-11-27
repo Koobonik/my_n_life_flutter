@@ -66,13 +66,13 @@ class _LoginPageState extends State<LoginPage> {
                       // var code = await AuthCodeClient.instance.requestWithTalk();
                       Log.info("code -> $code");
                       try {
-                        final result = await usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
-                        Log.info("result ->>> $result");
+                        final isSignup = await usersGetXController.accessSocial(code: code.accessToken, socialType: "kakao");
+                        Log.info("result ->>> $isSignup");
                         // 회원가입이라면
-                        if(result != null && result is bool && result == true){
+                        if(isSignup != null && isSignup is bool && isSignup == true){
                           Get.offAll(() => const SelectLifePage());
                         }
-                        else if(result != null && result is bool && result == false){
+                        else if(isSignup != null && isSignup is bool && isSignup == false){
                           if(kDebugMode){
                             // 지금은 회원가입 된다는 가정하에 라이프 선택 페이지로 감
                             Get.offAll(() => const SelectLifePage());

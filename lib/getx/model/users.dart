@@ -1,7 +1,9 @@
 class Users {
   int id;
   String nickname;
-  String imageUrl;
+  String? gender;
+  String? birthDay;
+  String? imageUrl;
   List<String> roles;
 
 //<editor-fold desc="Data Methods">
@@ -9,7 +11,9 @@ class Users {
   Users({
     required this.id,
     required this.nickname,
-    required this.imageUrl,
+    this.gender,
+    this.birthDay,
+    this.imageUrl,
     required this.roles,
   });
 
@@ -20,18 +24,27 @@ class Users {
           runtimeType == other.runtimeType &&
           id == other.id &&
           nickname == other.nickname &&
+          gender == other.gender &&
+          birthDay == other.birthDay &&
           imageUrl == other.imageUrl &&
           roles == other.roles);
 
   @override
   int get hashCode =>
-      id.hashCode ^ nickname.hashCode ^ imageUrl.hashCode ^ roles.hashCode;
+      id.hashCode ^
+      nickname.hashCode ^
+      gender.hashCode ^
+      birthDay.hashCode ^
+      imageUrl.hashCode ^
+      roles.hashCode;
 
   @override
   String toString() {
     return 'Users{' +
         ' id: $id,' +
         ' nickname: $nickname,' +
+        ' gender: $gender,' +
+        ' birthDay: $birthDay,' +
         ' imageUrl: $imageUrl,' +
         ' roles: $roles,' +
         '}';
@@ -40,12 +53,16 @@ class Users {
   Users copyWith({
     int? id,
     String? nickname,
+    String? gender,
+    String? birthDay,
     String? imageUrl,
     List<String>? roles,
   }) {
     return Users(
       id: id ?? this.id,
       nickname: nickname ?? this.nickname,
+      gender: gender ?? this.gender,
+      birthDay: birthDay ?? this.birthDay,
       imageUrl: imageUrl ?? this.imageUrl,
       roles: roles ?? this.roles,
     );
@@ -53,19 +70,23 @@ class Users {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'nickname': nickname,
-      'imageUrl': imageUrl,
-      'roles': roles,
+      'id': this.id,
+      'nickname': this.nickname,
+      'gender': this.gender,
+      'birthDay': this.birthDay,
+      'imageUrl': this.imageUrl,
+      'roles': this.roles,
     };
   }
 
-  factory Users.fromMap(Map<String, dynamic> map) {
+  factory Users.fromMap(dynamic map) {
     return Users(
       id: map['id'] as int,
       nickname: map['nickname'] as String,
-      imageUrl: map['imageUrl'] as String,
-      roles: List<String>.from(map['roles'])
+      gender: map['gender'] as String?,
+      birthDay: map['birthDay'] as String?,
+      imageUrl: map['imageUrl'] as String?,
+      roles: List<String>.from(map['roles']),
     );
   }
 

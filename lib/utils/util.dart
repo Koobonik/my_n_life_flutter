@@ -601,4 +601,81 @@ class Util {
   static String getMoneyFormat(int number){
     return NumberFormat("###,###,###,###").format(number);
   }
+
+  static Future genderChoiceAlert({required BuildContext context}) async {
+    bool? isMale;
+    final s = await showDialog(
+        barrierDismissible: true, // 바깥쪽 클릭했을 때 얼럿창 닫히지 않도록 해주는 flag
+        context: context,
+        barrierLabel: MaterialLocalizations.of(context)
+            .modalBarrierDismissLabel,
+        barrierColor: Colors.transparent,
+        builder: (BuildContext dialogContext) {
+          return StatefulBuilder(
+
+              builder: (BuildContext context3, StateSetter setState){
+                return Dialog(
+                  backgroundColor: CustomColor.white.withOpacity(0.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                    // side: BorderSide(width: 1, color: CustomColor.white.withOpacity(0.5)),
+                  ), //this
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      // boxShadow: [
+                      //   BoxShadow(color: CustomColor.white.withOpacity(0.5), blurRadius: 2, blurStyle: BlurStyle.outer)
+                      // ]
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                setState((){
+                                  isMale = true;
+                                });
+                              },
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                color: isMale != null ? isMale! ? Colors.blue : Colors.transparent : Colors.transparent,
+                                child: Center(child: Text("남성")),
+                              ),
+                            ),
+
+                            InkWell(
+                              onTap: (){
+                                setState((){
+                                  isMale = false;
+                                });
+                              },
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                color: isMale != null ? !isMale! ?Colors.pink : Colors.transparent : Colors.transparent,
+                                child: Center(child: Text("여성")),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(onPressed: (){
+                          if(isMale != null){
+                            return Navigator.of(dialogContext).pop(isMale);
+                          }
+                        }, child: Text("완료")),
+                      ],
+                    ),
+                  ),
+                );
+              });
+
+        });
+    return s;
+  }
 }
