@@ -108,8 +108,10 @@ class _LifeAveragePageState extends State<LifeAveragePage> {
         padding: const EdgeInsets.only(left: 20.0, right: 20),
         child: CustomButton.outlinedButton(child: SizedBox(
           width: double.infinity,
-          child: Text("${widget.hobby.name} 시작하기!", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700), textAlign: TextAlign.center,),), backgroundColor: CustomColor.lightBlue, radius: 24, outlineColor: Colors.transparent, onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BasePage()));
+          child: Text("${widget.hobby.name} 시작하기!", style: CustomTextStyle.createTextStyle(fontSize: 14, fontWeight: FontWeight.w700), textAlign: TextAlign.center,),), backgroundColor: CustomColor.lightBlue, radius: 24, outlineColor: Colors.transparent, onPressed: () async {
+          // 취미 계정을 서버에서 생성 해주어야 함.
+          
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BasePage()));
         }),
       ),
     );
